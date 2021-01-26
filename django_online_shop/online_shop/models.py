@@ -44,7 +44,7 @@ class Order(models.Model):
     )
 
 class Item(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE) #related_name='section_is_main')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(default=1)   
 
