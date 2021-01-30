@@ -35,7 +35,8 @@ class Order(models.Model):
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.NEW 
     )
-    total_price = models.PositiveIntegerField(default=0)   
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_items = models.PositiveSmallIntegerField(default=0)     
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -43,10 +44,21 @@ class Order(models.Model):
         auto_now=True
     )
 
+    def save(self, *args, **kwargs):
+        self.total_price = sum(item.get_cost() for item in self.items.all())
+        self.total_items = sum(item.quantity for item in self.items.all())
+        super(Order, self).save(*args, **kwargs)
+
+
 class Item(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    quantity = models.PositiveSmallIntegerField(default=1)   
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    quantity = models.PositiveSmallIntegerField(default=0)   
+    price = models.DecimalField(decimal_places=2, max_digits=10)
+
+    def get_cost(self):
+        return self.price * self.quantity
+    
 
 
 class Review(models.Model):
