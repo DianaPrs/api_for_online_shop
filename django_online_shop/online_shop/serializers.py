@@ -19,16 +19,6 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('name', 'description', 'price', 'created_at', 'updated_at',)
 
-    
-    def create(self, validated_data):
-        """Метод для создания"""
-        pass
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        """Метод для обновления"""
-        pass
-        return super().update(instance, validated_data)
 
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer для заказа."""
@@ -40,14 +30,12 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('creator', 'products', 'status', 'total_price', 'created_at', 'updated_at',) 
 
-    def create(self, validated_data):
-        """Метод для создания"""
-        pass
-        return super().create(validated_data)
 
     def update(self, instance, validated_data):
         """Метод для обновления"""
-        pass
+        order = Order.objects.get(pk=instance.id)
+        if order.status != validated_data['status'] and not self.context["request"].user.is_staff:
+            raise serializers.ValidationError("Only admin can update status")
         return super().update(instance, validated_data)
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -62,13 +50,11 @@ class ReviewSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         """Метод для создания"""
-        pass
+        user = self.context["request"].user
+        review = Review.objects.filter(creator=user)
+        if len(review) >= 1:
+            raise serializers.ValidationError("User alredy left review")
         return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        """Метод для обновления"""
-        pass
-        return super().update(instance, validated_data)
 
 
 class ProductCollectionSerializer(serializers.ModelSerializer):

@@ -1,0 +1,99 @@
+# примеры API-запросов
+
+# получение товара
+GET http://localhost:8000/api/v1/products/
+Content-Type: application/json
+
+
+###
+
+# создание товара
+POST http://localhost:8000/api/v1/products/
+Content-Type: application/json
+
+{
+  "name": "iphone",
+  "description": "16",
+   "price": "1"
+}
+
+###
+
+# создание заказа
+POST http://localhost:8000/api/v1/orders/
+Content-Type: application/json
+
+###
+
+# попытка поменять статус заказа
+PATCH http://localhost:8000/api/v1/orders/2/
+Content-Type: application/json
+Authorization: Token b4d563a669b176a76b0fad9433a21712dd75c51a
+
+{
+  "status": "NEW"
+}
+
+###
+
+# получение заказа
+GET http://localhost:8000/api/v1/orders/
+Content-Type: application/json
+Authorization: Token 34408fb70083eb5b17a1da35198003cf13f1cb89
+
+
+###
+
+# попытка удалить 
+DELETE http://localhost:8000/api/
+Content-Type: application/json
+Authorization: Token 
+
+###
+
+# создание отзыва
+POST http://localhost:8000/api/v1/product-reviews/
+Content-Type: application/json
+Authorization: Token b4d563a669b176a76b0fad9433a21712dd75c51a
+
+{
+  "text": "useless",
+   "rating": "1"
+}
+
+###
+
+# получение отзыва
+GET http://localhost:8000/api/v1/product-reviews/
+Content-Type: application/json
+
+###
+
+# изменение отзыва
+PATCH http://localhost:8000/api/v1/product-reviews/1/
+Content-Type: application/json
+Authorization: Token cf127f8fe8ddad7bdc60ffc6fc079af902059329
+
+{
+   "rating": "5"
+}
+
+###
+
+# фильтрация по создателю
+GET http://localhost:8000/api//?creator=3
+Content-Type: application/json
+
+###
+
+# фильтрация по стутусу
+GET http://localhost:8000/api//?status=open
+Content-Type: application/json
+
+###
+
+# фильтрация по дате
+GET localhost:8000/api/advertisements/?created_at_before=2020-10-01
+Content-Type: application/json
+
+

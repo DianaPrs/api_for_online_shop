@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from online_shop.views import ProductViewSet, OrderViewSet, ReviweViewSet, ProductCollectionViewSet
 from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken import views
 
 router = DefaultRouter()
 router.register('products', ProductViewSet, basename='products')
@@ -25,6 +26,7 @@ router.register('product-reviews', ReviweViewSet, basename='product-reviews')
 router.register('product-collections', ProductCollectionViewSet, basename='product-collections')
 
 urlpatterns = [
+    path('api-token-auth/', views.obtain_auth_token),
     path('api/v1/', include(router.urls)),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),   
 ]

@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from online_shop.models import Product, Order, Review, ProductCollection
+from online_shop.models import Product, Order, Item, Review, ProductCollection, OrderStatusChoices
 
 class ProductFilter(filters.FilterSet):
     """Фильтры для товаров."""
@@ -15,12 +15,21 @@ class ProductFilter(filters.FilterSet):
 
 
 class OrderFilter(filters.FilterSet):
-    """Фильтры для заказов.Заказы можно фильтровать по статусу / общей сумме / дате создания / дате обновления и продуктам из позиций."""
-    pass
+    """Фильтры для заказов."""
+
+    status = filters.ChoiceFilter(choices=OrderStatusChoices.choices) 
+    price_from= filters.NumberFilter(field_name='total_price', lookup_expr="gte")
+    price_to= filters.NumberFilter(field_name='total_price', lookup_expr="lte")
+    products =  filters.CharFilter()
+    created_at = filters.DateFromToRangeFilter()
+    updated_at = filters.DateFromToRangeFilter()
+
+    class Meta:
+        model = Order
+        fields = ('status', 'price_from', 'price_to', 'products', 'created_at', 'updated_at',)
 
 class ReviewFilter(filters.FilterSet):
     """Фильтры для отзывов. Отзыв можно фильтровать по ID пользователя, дате создания и ID товара."""
-    pass
 
     creator = filters.NumberFilter() 
     product = filters.NumberFilter() 
@@ -29,5 +38,3 @@ class ReviewFilter(filters.FilterSet):
     class Meta:
         model = Review
         fields = ('creator', 'product', 'created_at',)
-        
-

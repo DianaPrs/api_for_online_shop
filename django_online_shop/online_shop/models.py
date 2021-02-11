@@ -20,8 +20,8 @@ class Product(models.Model):
 class OrderStatusChoices(models.TextChoices):
     """Статусы заказа."""
 
-    NEW = "NEW ", "Новый"
-    IN_PROGRESS = "IN_PROGRESS ", "В процессе"
+    NEW = "NEW", "Новый"
+    IN_PROGRESS = "IN_PROGRESS", "В процессе"
     DONE = "DONE", "Закрыт"
 
 class Order(models.Model):
