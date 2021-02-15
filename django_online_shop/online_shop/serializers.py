@@ -17,18 +17,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('name', 'description', 'price', 'created_at', 'updated_at',)
+        fields = ('id', 'name', 'description', 'price', 'created_at', 'updated_at',)
 
 
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer для заказа."""
-    creator = UserSerializer(
-    read_only=True,
-    )
 
     class Meta:
         model = Order
-        fields = ('creator', 'products', 'status', 'total_price', 'created_at', 'updated_at',) 
+        fields = ('id', 'creator', 'products', 'status', 'total_price', 'created_at', 'updated_at',) 
 
 
     def update(self, instance, validated_data):
@@ -40,9 +37,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
 
-    creator = UserSerializer(
-    read_only=True,
-    )
+    product_id = serializers.CharField(read_only=False)
 
     class Meta:
         model = Review

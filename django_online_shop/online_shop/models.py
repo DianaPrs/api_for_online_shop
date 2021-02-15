@@ -35,7 +35,7 @@ class Order(models.Model):
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.NEW 
     )
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True) 
     total_items = models.PositiveSmallIntegerField(default=0)     
     created_at = models.DateTimeField(
         auto_now_add=True
@@ -51,13 +51,22 @@ class Order(models.Model):
 
 
 class Item(models.Model):
+    """Позиция."""
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     quantity = models.PositiveSmallIntegerField(default=0)   
     price = models.DecimalField(decimal_places=2, max_digits=10)
 
+    def __str__(self):
+        return self.product.name
+
     def get_cost(self):
         return self.price * self.quantity
+
+    def save(self, *args, **kwargs):
+        if self.price is None:
+            self.price = self.product.price
+        super(Item, self).save(*args, **kwargs)
     
 
 

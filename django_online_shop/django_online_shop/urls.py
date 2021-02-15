@@ -26,7 +26,9 @@ router.register('product-reviews', ReviweViewSet, basename='product-reviews')
 router.register('product-collections', ProductCollectionViewSet, basename='product-collections')
 
 urlpatterns = [
-    path('api-token-auth/', views.obtain_auth_token),
-    path('api/v1/', include(router.urls)),
+    path('api-token-auth/', views.obtain_auth_token, name='auth-token'),
+    path('api/v1/auth-token/', include('djoser.urls.authtoken')),
+    path('api/v1/auth/', include('djoser.urls')),
+    path('api/v1/', include(router.urls)), 
     path('admin/', admin.site.urls),   
 ]

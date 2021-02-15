@@ -29,7 +29,7 @@ class OrderFilter(filters.FilterSet):
         fields = ('status', 'price_from', 'price_to', 'products', 'created_at', 'updated_at',)
 
 class ReviewFilter(filters.FilterSet):
-    """Фильтры для отзывов. Отзыв можно фильтровать по ID пользователя, дате создания и ID товара."""
+    """Фильтры для отзывов."""
 
     creator = filters.NumberFilter() 
     product = filters.NumberFilter() 

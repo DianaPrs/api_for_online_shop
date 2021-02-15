@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.viewsets import ModelViewSet
 from online_shop.models import Product, Order, Review, ProductCollection
 from .filters import  ProductFilter, ReviewFilter, OrderFilter
 from .serializers import UserSerializer, ProductSerializer, OrderSerializer, ReviewSerializer, ProductCollectionSerializer
 
-class IsOwner(permissions.BasePermission):
-
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """Класс разрешений для владельца объекта"""
     def has_object_permission(self, request, view, obj):
         if request.user.is_staff:
             return True
@@ -22,7 +22,9 @@ class ProductViewSet(ModelViewSet):
     def get_permissions(self):
         """Получение прав для действий."""
         if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAdminUser()]     
+            return [IsAdminUser()]
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]     
         return []
 
 class OrderViewSet(ModelViewSet):
@@ -38,7 +40,7 @@ class OrderViewSet(ModelViewSet):
         if self.action in ["list"]: 
             return [IsAdminUser()]  
         if self.action in ["retrieve", "update", "partial_update", "destroy"]:
-            return [IsOwner()] 
+            return [IsOwnerOrAdmin()] 
         return [] 
 
 class ReviweViewSet(ModelViewSet):
@@ -52,7 +54,7 @@ class ReviweViewSet(ModelViewSet):
         if self.action in ["create"]:
             return [IsAuthenticated()]
         if self.action in ["update", "partial_update", "destroy"]:
-            return [IsOwner()] 
+            return [IsOwnerOrAdmin()] 
         return []
 
 class ProductCollectionViewSet(ModelViewSet):
