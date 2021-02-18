@@ -65,5 +65,7 @@ class ProductCollectionViewSet(ModelViewSet):
     def get_permissions(self):
         """Получение прав для действий."""
         if self.action in ["create", "update", "partial_update", "destroy"]:
-            return [IsAdminUser()]     
+            return [IsAdminUser()]   
+        if self.action in ["list", "retrieve"]:
+            return [AllowAny()]     
         return []

@@ -41,7 +41,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('creator', 'product_id', 'text', 'rating', 'created_at', 'updated_at',)
+        fields = ('id', 'creator', 'product_id', 'text', 'rating', 'created_at', 'updated_at',)
     
     def create(self, validated_data):
         """Метод для создания"""
@@ -56,4 +56,4 @@ class ProductCollectionSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProductCollection
-        fields = ('headline', 'text', 'items', 'created_at', 'updated_at',)
+        fields = ('id', 'headline', 'text', 'items', 'created_at', 'updated_at',)

@@ -13,11 +13,6 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8000/api/v1/auth-token/token/login/
-Content-Type: application/json
-
-###
-
 # получение списка товаров
 GET http://localhost:8000/api/v1/products/
 Content-Type: application/json
@@ -111,20 +106,26 @@ Authorization: Token cf127f8fe8ddad7bdc60ffc6fc079af902059329
 
 ###
 
-# фильтрация по создателю
-GET http://localhost:8000/api//?creator=3
+# получение списка подборок
+GET http://localhost:8000/api/v1/product-collections/
 Content-Type: application/json
 
 ###
 
-# фильтрация по стутусу
-GET http://localhost:8000/api//?status=open
+# фильтрация заказов по статусу
+GET http://localhost:8000/api/v1/orders/?status=NEW
+Content-Type: application/json
+Authorization: Token 34408fb70083eb5b17a1da35198003cf13f1cb89
+###
+
+# фильтрация отзывов по ID автора
+GET http://localhost:8000/api/v1/product-reviews/?creator=2
 Content-Type: application/json
 
 ###
 
-# фильтрация по дате
-GET localhost:8000/api/advertisements/?created_at_before=2020-10-01
+# фильтрация товаров по цене
+GET http://localhost:8000/api/v1/products/?price_to=30
 Content-Type: application/json
 
 

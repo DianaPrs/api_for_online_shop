@@ -4,6 +4,29 @@ API для интернет-магазина.
 API сервиса и интерфейс администрирования. 
 В качестве фреймворка Django и Django REST Framework.
 
+Описание API
+-------------------
+
+Сущности:
+
+Товар
+url: /api/v1/products/
+
+Отзыв к товару
+url: /api/v1/product-reviews/
+
+Заказы
+url: /api/v1/orders/
+
+Подборки
+url: /api/v1/product-collections/
+
+Регистрация пользователя:
+url: /api/v1/auth/users/
+
+Получение токена:
+url: /api/v1/auth-token/token/login/
+
 
 Установка
 --------------
@@ -31,6 +54,24 @@ pip install -r requirements.txt
 
 Настройка
 ---------------
+Создайте файл settings_local.py с настройками:
+```
+import os
+from .settings import BASE_DIR
+
+SECRET_KEY = 'YOUR_SECRET_KEY'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'online_shop_db',
+        'USER': 'YOUR_USERNAME',
+        'PASSWORD': 'YOUR_PASSWORD',
+        'HOST': 'YOUR_HOST',
+        'PORT': 'YOUR_PORT',
+    }
+}
+```
 
 Создайте базу в postgres и проведите миграцию:
 ```
