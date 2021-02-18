@@ -2,12 +2,14 @@
 .idea/
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 
 *.sqlite3
 env/
 
+.coverage
 ### Project specific ###
 settings_local.py
 
