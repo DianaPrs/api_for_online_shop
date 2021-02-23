@@ -177,7 +177,6 @@ def test_create_order(api_client, product_factory, user_factory):
    api_client.force_authenticate(user=user)
    response = api_client.post(url, data)
    resp_json = response.json()
-   print(resp_json)
    assert response.status_code == HTTP_201_CREATED
   
 
