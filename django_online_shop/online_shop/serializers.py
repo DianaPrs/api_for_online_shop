@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from online_shop.models import Product, Order, Review, ProductCollection
+from online_shop.models import Product, Order, Item, Review, ProductCollection
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,13 +20,45 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'price', 'created_at', 'updated_at',)
 
 
+class ItemSerializer(serializers.ModelSerializer):
+    """Serializer для позиции."""
+
+    product = serializers.PrimaryKeyRelatedField(
+        queryset = Product.objects.all(),
+        required=True) 
+    
+    class Meta:
+        model = Item
+        fields = ('product', 'quantity',)
+
+
 class OrderSerializer(serializers.ModelSerializer):
     """Serializer для заказа."""
 
+    creator = UserSerializer(read_only=True)
+    positions = ItemSerializer(many=True)
+
     class Meta:
         model = Order
-        fields = ('id', 'creator', 'products', 'status', 'total_price', 'created_at', 'updated_at',) 
+        fields = ('id', 'creator', 'positions', 'status', 'total_price', 'created_at', 'updated_at',) 
+    
+    def create(self, validated_data):
+        """Метод создания заказа"""
+        validated_data["creator"] = self.context["request"].user
+        positions_data = validated_data.pop('positions')
+        order = super().create(validated_data)
 
+        raw_positions = []
+        for position in positions_data:
+            product_id = position["product"].id 
+            position = Item(order=order, 
+            product=position["product"],
+            quantity=position["quantity"],
+            price=Product.objects.get(id=product_id).price
+            )
+            raw_positions.append(position)
+        Item.objects.bulk_create(raw_positions)
+        return order
 
     def update(self, instance, validated_data):
         """Метод для обновления"""
@@ -35,8 +67,10 @@ class OrderSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Only admin can update status")
         return super().update(instance, validated_data)
 
-class ReviewSerializer(serializers.ModelSerializer):
 
+class ReviewSerializer(serializers.ModelSerializer):
+    """Serializer для отзыва."""
+    creator = UserSerializer(read_only=True)
     product_id = serializers.CharField(read_only=False)
 
     class Meta:
@@ -44,8 +78,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('id', 'creator', 'product_id', 'text', 'rating', 'created_at', 'updated_at',)
     
     def create(self, validated_data):
-        """Метод для создания"""
+        """Метод для создания отзыва"""
         user = self.context["request"].user
+        validated_data["creator"] = user
         review = Review.objects.filter(creator=user)
         if len(review) >= 1:
             raise serializers.ValidationError("User alredy left review")
@@ -53,7 +88,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class ProductCollectionSerializer(serializers.ModelSerializer):
-    
+    """Serializer для подборки."""
     class Meta:
         model = ProductCollection
         fields = ('id', 'headline', 'text', 'items', 'created_at', 'updated_at',)

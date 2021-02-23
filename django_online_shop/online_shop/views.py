@@ -2,9 +2,9 @@ from django.shortcuts import render
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.viewsets import ModelViewSet
-from online_shop.models import Product, Order, Review, ProductCollection
+from online_shop.models import Product, Order, Review, ProductCollection, Item
 from .filters import  ProductFilter, ReviewFilter, OrderFilter
-from .serializers import UserSerializer, ProductSerializer, OrderSerializer, ReviewSerializer, ProductCollectionSerializer
+from .serializers import UserSerializer, ProductSerializer, OrderSerializer, ItemSerializer, ReviewSerializer, ProductCollectionSerializer
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """Класс разрешений для владельца объекта"""

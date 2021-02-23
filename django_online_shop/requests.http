@@ -40,12 +40,17 @@ Content-Type: application/json
 # создание заказа
 POST http://localhost:8000/api/v1/orders/
 Content-Type: application/json
-Authorization: Token de78b595e3e5563f7b43780bf894232e5cc768e3
+Authorization: Token b4d563a669b176a76b0fad9433a21712dd75c51a
 
 {
-  "creator": 6,
-  "products": 1
+"positions": [
+{"product": 1,
+  "quantity": 3},
+  {"product": 2,
+  "quantity": 1 }
+]
 }
+
 
 ###
 
@@ -76,12 +81,11 @@ Authorization: Token b4d563a669b176a76b0fad9433a21712dd75c51a
 ###
 
 # создание отзыва
-POST http://localhost:8000/api/eviewv1/product-reviews/
+POST http://localhost:8000/api/v1/product-reviews/
 Content-Type: application/json
 Authorization: Token 44a31551421ac24381d08380574fe4c56ee0c749
 
 {  
-  "creator": 7,
   "product_id": 2,
   "text": "ok"
 }

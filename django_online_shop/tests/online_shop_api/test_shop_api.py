@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_401_UNAUTHORIZED, HTTP_403_FORBIDDEN, HTTP_405_METHOD_NOT_ALLOWED 
 from rest_framework.authtoken.models import Token
-from online_shop.models import Product, Order, Review, ProductCollection
+from online_shop.models import Product, Order, Review, ProductCollection, Item
 
 num = random.randint(2, 10)
 
@@ -31,7 +31,7 @@ def test_create_product(api_client, admin_user):
     assert product.name == "Test"
 
 @pytest.mark.django_db
-def test_get_product(api_client, product_factory):
+def test_get_product_list(api_client, product_factory):
     """Проверка получения списка товаров"""
     product = product_factory(_quantity=num)
     url = reverse('products-list')
@@ -173,10 +173,13 @@ def test_create_order(api_client, product_factory, user_factory):
    url = reverse('orders-list')
    user = user_factory()
    product = product_factory()
-   data = {"creator": user.id, "products": product.id}
+   data = {"creator": user.id, "positions": [{"product": product, "quantity": num}]}
    api_client.force_authenticate(user=user)
    response = api_client.post(url, data)
+   resp_json = response.json()
+   print(resp_json)
    assert response.status_code == HTTP_201_CREATED
+  
 
 @pytest.mark.django_db
 def test_update_order_status(api_client, order_factory, admin_user):
@@ -198,8 +201,6 @@ def test_update_order_status_false(api_client, user_factory, order_factory):
     url = reverse('orders-detail', args=(order.id, ))
     api_client.force_authenticate(user=user)
     resp = api_client.patch(url,  {"status": "DONE"})
-    print(f'in order: {order.status}')
-    print(f'in user: {user}')
     assert resp.status_code == 400
     api_client.force_authenticate(user=None)
     response = api_client.patch(url, {"status": "DONE"})

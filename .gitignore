@@ -8,7 +8,7 @@ __pycache__/
 
 *.sqlite3
 env/
-
+.vscode/
 .coverage
 ### Project specific ###
 settings_local.py

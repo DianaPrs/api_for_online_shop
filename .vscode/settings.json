@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestArgs": [
+        "django_online_shop"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true
+}

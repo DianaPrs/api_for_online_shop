@@ -45,15 +45,15 @@ class Order(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        self.total_price = sum(item.get_cost() for item in self.items.all())
-        self.total_items = sum(item.quantity for item in self.items.all())
+        self.total_price = sum(item.get_cost() for item in self.positions.all())
+        self.total_items = sum(item.quantity for item in self.positions.all())
         super(Order, self).save(*args, **kwargs)
 
 
 class Item(models.Model):
     """Позиция."""
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='positions')
     quantity = models.PositiveSmallIntegerField(default=0)   
     price = models.DecimalField(decimal_places=2, max_digits=10)
 
