@@ -50,12 +50,10 @@ class OrderSerializer(serializers.ModelSerializer):
 
         raw_positions = []
         for position in positions_data:
-            product_id = position["product"].id 
             position = Item(order=order, 
             product=position["product"],
             quantity=position["quantity"],
-            price=Product.objects.get(id=product_id).price
-            )
+            price=position["product"].price)
             raw_positions.append(position)
         Item.objects.bulk_create(raw_positions)
         return order

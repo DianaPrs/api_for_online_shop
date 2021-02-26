@@ -173,10 +173,9 @@ def test_create_order(api_client, product_factory, user_factory):
    url = reverse('orders-list')
    user = user_factory()
    product = product_factory()
-   data = {"creator": user.id, "positions": [{"product": product, "quantity": num}]}
+   data = {"positions": [{"product": product.id, "quantity": num}]}
    api_client.force_authenticate(user=user)
-   response = api_client.post(url, data)
-   resp_json = response.json()
+   response = api_client.post(url, data, format='json')
    assert response.status_code == HTTP_201_CREATED
   
 
